@@ -1,5 +1,7 @@
 package algorithm
 
+import "strings"
+
 type Graph struct {
 	Nodes 	 []string				`json:"nodes"`
 	Edges    map[string][]string	`json:"edges"`
@@ -11,6 +13,22 @@ func min(a, b int) int {
 		return a
 	}
 	return b
+}
+
+// Helper unction to filter duplicate
+func filterDuplicates(slice [][]string) [][]string {
+    encountered := make(map[string]bool)
+    result := [][]string{}
+    
+    for _, subSlice := range slice {
+        str := strings.Join(subSlice, "")
+        if !encountered[str] {
+            encountered[str] = true
+            result = append(result, subSlice)
+        }
+    }
+    
+    return result
 }
 
 // Doing SCC using Tarjans
@@ -67,7 +85,7 @@ func TarjanSCC(g *Graph) [][]string {
 		}
 	}
 
-	return result
+	return filterDuplicates(result);
 }
 
 // Finding Bridges using modified Tarjans
