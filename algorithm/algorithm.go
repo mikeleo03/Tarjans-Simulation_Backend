@@ -13,6 +13,7 @@ func min(a, b int) int {
 	return b
 }
 
+// Doing SCC using Tarjans
 func TarjanSCC(g *Graph) [][]string {
 	// Initialize variables
 	index := 0
@@ -67,4 +68,49 @@ func TarjanSCC(g *Graph) [][]string {
 	}
 
 	return result
+}
+
+// Finding Bridges using modified Tarjans
+func TarjanBridges(g *Graph) [][]string {
+	// Initialize variables
+	index := 0
+	indices := make(map[string]int)
+	lowLinks := make(map[string]int)
+	bridges := make([][]string, 0)
+
+	// Recursive depth-first search function
+	var strongConnect func(v, parent string)
+
+	strongConnect = func(v, parent string) {
+		// Set the depth index and low link value of the current vertex
+		indices[v] = index
+		lowLinks[v] = index
+		index++
+
+		// Consider all neighbors of the current vertex
+		for _, w := range g.Edges[v] {
+			if indices[w] == 0 {
+				// Neighbor w has not yet been visited, so recursively visit it
+				strongConnect(w, v)
+				lowLinks[v] = min(lowLinks[v], lowLinks[w])
+				// Check if the edge (v, w) is a bridge
+				if lowLinks[w] > indices[v] || lowLinks[v] > indices[w] {
+					bridge := []string{v, w}
+					bridges = append(bridges, bridge)
+				}
+			} else if w != parent {
+				// Neighbor w has been visited and is not the parent of v, update the low link value
+				lowLinks[v] = min(lowLinks[v], indices[w])
+			}
+		}
+	}
+
+	// Perform Tarjan's algorithm on each unvisited vertex
+	for _, v := range g.Nodes {
+		if indices[v] == 0 {
+			strongConnect(v, "")
+		}
+	}
+
+	return bridges
 }
