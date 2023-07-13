@@ -48,15 +48,15 @@ Consider there are graph as following
 ```mermaid
 graph LR
 1((1)) --> 2((2))
-1 --> 3
-1 --> 8
-2 --> 4
-3 --> 5
-4 --> 6
-5 --> 4
-5 --> 7
-5 --> 8
-6 --> 2
+1((1)) --> 3((3))
+1((1)) --> 8((8))
+2((2)) --> 4((4))
+3((3)) --> 5((5))
+4((4)) --> 6((6))
+5((5)) --> 4((4))
+5((5)) --> 7((7))
+5((5)) --> 8((8))
+6((6)) --> 2((2))
 ```
 And doing DFS process from edge 1, then
 1. <b>Tree Edge</b> is an edge which is present in the tree obtained after applying DFS on the graph. In the example above, the tree edge is 1->2, 2->4, 4->6, 1->3, 3->5, 5->7, 5->8. 
